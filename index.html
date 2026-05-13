@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索木柵之美 | 景點、美食與自然步道</title>
+    <!-- 引入 Google Fonts: Noto Sans TC (思源黑體) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- 引入 Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'tea': {
+                            50: '#f2f8f1',
+                            100: '#e1efe0',
+                            200: '#c3ddc1',
+                            300: '#99c296',
+                            400: '#6ca169',
+                            500: '#4b8349', // 主色調：抹茶綠
+                            600: '#3a6838',
+                            700: '#31532f',
+                            800: '#294328',
+                            900: '#233722',
+                        },
+                        'wood': {
+                            500: '#8b5a2b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 基礎淡入動畫 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Modal 彈出視窗動畫 */
+        .modal-overlay {
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease-out;
+        }
+        .modal-panel {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 隱藏捲軸但保留滾動功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* 避免彈出視窗開啟時背景滾動 */
+        body.modal-open {
+            overflow: hidden;
+            padding-right: 15px; /* 補償捲軸消失的寬度避免畫面跳動 */
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 antialiased selection:bg-tea-300 selection:text-tea-900">
+
+    <!-- 導覽列 -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <i class="ph-fill ph-leaf text-tea-600 text-2xl mr-2 group-hover:rotate-12 transition-transform"></i>
+                    <span class="font-bold text-xl tracking-wider text-gray-900">木柵之美</span>
+                </div>
+                <!-- 電腦版選單 -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#attractions" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">必訪景點</a>
+                    <a href="#food" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">私房美食</a>
+                    <a href="#nature" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">健行與運動</a>
+                </div>
+                <!-- 手機版選單按鈕 -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-tea-600 focus:outline-none p-2">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 手機版下拉選單 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full">
+        <div class="px-4 py-3 space-y-2">
+            <a href="#attractions" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-map-pin mr-2"></i>必訪景點</a>
+            <a href="#food" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-fork-knife mr-2"></i>私房美食</a>
+            <a href="#nature" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-mountains mr-2"></i>健行與運動</a>
+        </div>
+    </div>
+</nav>
+
+    <!-- 首頁橫幅 (Hero Section) -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- 背景圖片 (加入 onerror 備援) -->
+        <div class="absolute inset-0">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_101_2009_amk.jpg?width=1920" alt="木柵茶園風景" onerror="this.onerror=null; this.src='https://placehold.co/1920x1080/294328/ffffff?text=Explore+Muzha'" class="w-full h-full object-cover scale-105 transform origin-center animate-[pulse_20s_ease-in-out_infinite_alternate]" />
+            <div class="absolute inset-0 bg-gray-900/60 mix-blend-multiply"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-transparent to-gray-50/95"></div>
+        </div>
+        
+        <!-- 內容 -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 fade-in-up">
+            <span class="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur border border-white/30 text-white font-medium tracking-[0.2em] mb-6 text-sm shadow-sm">TAIPEI WENSHAN DISTRICT</span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-xl leading-tight">
+                遠離城市喧囂<br/><span class="text-tea-300">細細品味木柵之美</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-100 mb-10 leading-relaxed max-w-3xl mx-auto drop-shadow-md font-light">
+                穿梭於茶香繚繞的貓空山林、漫步在景美溪畔的微風中。這裡不僅有全台最大的動物園，更隱藏著政大學生口耳相傳的巷弄美味與職人咖啡。跟著我們的腳步，探索屬於台北南區獨有的慢活節奏。
+            </p>
+            <a href="#attractions" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-tea-900 bg-tea-300 rounded-full shadow-lg hover:bg-white hover:shadow-tea-300/50 hover:-translate-y-1 transition-all duration-300 group">
+                展開深度旅程
+                <i class="ph ph-arrow-down ml-2 group-hover:animate-bounce"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 必訪景點 Section -->
+    <section id="attractions" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">經典必訪地標</h2>
+                <div class="h-1 w-24 bg-tea-500 mx-auto rounded-full"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto text-lg">從百年香火鼎盛的廟宇到絕美的現代圖書館，木柵擁有全台北最具多樣性與深度的休閒地標，適合安排半日或一日遊。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+                <!-- 景點 1: 貓空纜車 -->
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maokong_Gondola_20210817.jpg?width=800" alt="貓空纜車" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Maokong+Gondola'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">浪漫約會</div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">貓空纜車與茶園</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">搭乘底部透明的水晶車廂鳥瞰大台北盆地，抵達山頂後品嚐正宗鐵觀音茶。這裡是結合賞夜景、品茶文化與自然步道的最佳去處。</p>
+                        <button onclick="openModal('modal-data-attr1')" class="mt-auto w-full py-3 bg-gray-50 text-tea-700 rounded-xl font-medium hover:bg-tea-600 hover:text-white transition-colors duration-300 flex justify-center items-center">
+                            深度介紹 <i class="ph ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="modal-data-attr1" class="hidden">
+                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Maokong_Gondola_20210817.jpg?width=1200</span>
+                        <span class="m-title">貓空纜車與在地茶文化</span>
+                        <div class="m-tags">
+                            <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">熱門地標</span>
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">百萬夜景</span>
+                        </div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>貓空纜車於2007年正式啟用，全長4.03公里，是台北市第一條、也是目前唯一的高空纜車系統。整趟旅程約20至30分鐘，最受遊客歡迎的莫過於底部由強化玻璃製成的「水晶車廂（貓纜之眼）」。在車廂內，你不僅能享受彷彿在樹冠層上滑行的刺激感，隨著海拔爬升，還能將台北盆地與地標台北101的美景盡收眼底。</p>
+                            <p>到達纜車終點「貓空站」後，迎面而來的是滿山的茶園與清新的空氣。木柵是台灣著名「鐵觀音茶」的發源地，當地保有超過五十家以上的景觀茶坊。這裡的茶文化有別於一般手搖飲，講究的是泡茶的儀式感與茶葉的喉韻。</p>
+                            <p>無論是白天來此品茗、享用特色的茶葉料理，還是夜晚與三五好友吹著山區微風、俯瞰繁華的城市夜景，都是極致的享受。強烈建議下午時分搭乘纜車上山，一次將日落黃昏與百萬夜景收集齊全。</p>
+                            <div class="bg-gray-50 p-5 rounded-2xl mt-6 border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-3 flex items-center text-xl"><i class="ph-fill ph-info text-tea-500 mr-2"></i> 達人參觀資訊</h4>
+                                <ul class="space-y-3 text-base">
+                                    <li><strong>📍 地點：</strong> 台北市文山區新光路二段8號 (動物園站起點)</li>
+                                    <li><strong>💡 隱藏玩法：</strong> 貓空站周邊有許多環狀步道（如樟樹步道），非常適合長輩散步，走完再找間茶屋喝茶休息。</li>
+                                    <li><strong>🚌 交通方式：</strong> 搭乘捷運文湖線至「動物園站」，步行約5分鐘即可抵達纜車站。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 2: 動物園 -->
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 100ms;">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_Zoo_Entrance_20220822.jpg?width=800" alt="木柵動物園" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Taipei+Zoo'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">親子首選</div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">臺北市立動物園</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">全台最大的動物園，近年全新落成的「穿山甲館」打造熱帶雨林沉浸式體驗。園區廣大且自然綠化完善，是週末放電與生態教育的完美場所。</p>
+                        <button onclick="openModal('modal-data-attr2')" class="mt-auto w-full py-3 bg-gray-50 text-tea-700 rounded-xl font-medium hover:bg-tea-600 hover:text-white transition-colors duration-300 flex justify-center items-center">
+                            深度介紹 <i class="ph ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="modal-data-attr2" class="hidden">
+                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_Zoo_Entrance_20220822.jpg?width=1200</span>
+                        <span class="m-title">臺北市立動物園</span>
+                        <div class="m-tags">
+                            <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">親子必遊</span>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">生態教育</span>
+                        </div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>創立於1914年的臺北市立動物園（俗稱木柵動物園），佔地高達165公頃，是全台面積最大、更是亞洲最大的動物園之一。園區設計採用了先進的「地理生態展示法」，以無柵欄、隱藏式壕溝的方式，讓動物能在盡可能接近自然棲地的環境中生活，同時也讓遊客有更親近自然的感受。</p>
+                            <p>園區內除了大家熟知的超人氣明星「大貓熊」、「無尾熊」和「國王企鵝」外，近年來最受矚目的絕對是全新落成的「熱帶雨林室內館（穿山甲館）」。這座巨大的流線型溫室建築，內部完美融合了水域、樹林與空中步道，遊客走在其中能近距離觀察樹懶、水豚、棉頭絹猴等珍稀動物，彷彿一秒置身亞馬遜叢林。</p>
+                            <p>此外，台灣動物區也是極具教育意義的一區，這裡保育了台灣黑熊、石虎等本土珍貴物種，展現了動物園在生態保育上的重要貢獻。</p>
+                            <div class="bg-gray-50 p-5 rounded-2xl mt-6 border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-3 flex items-center text-xl"><i class="ph-fill ph-info text-tea-500 mr-2"></i> 達人參觀資訊</h4>
+                                <ul class="space-y-3 text-base">
+                                    <li><strong>📍 地點：</strong> 台北市文山區新光路二段30號</li>
+                                    <li><strong>💡 節省體力攻略：</strong> 入園後建議先搭乘「遊客列車」直接前往最上方的鳥園或爬蟲館，再一路下坡慢慢逛下來，這樣走最省力！</li>
+                                    <li><strong>⚠️ 貼心提醒：</strong> 園區範圍極大，務必穿著舒適的步行鞋，並做好防曬與防蚊準備。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 3: 指南宮 -->
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Zhinan_Temple_20231108_(cropped).jpg?width=800" alt="指南宮" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Zhinan+Temple'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">歷史人文</div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">指南宮 (仙公廟)</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">擁有超過130年歷史的道教聖地。不僅建築氣勢宏偉，近年更打破「情侶分手」傳說，設立了浪漫的情人聖地與祈福步道。</p>
+                        <button onclick="openModal('modal-data-attr3')" class="mt-auto w-full py-3 bg-gray-50 text-tea-700 rounded-xl font-medium hover:bg-tea-600 hover:text-white transition-colors duration-300 flex justify-center items-center">
+                            深度介紹 <i class="ph ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="modal-data-attr3" class="hidden">
+                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Zhinan_Temple_20231108_(cropped).jpg?width=1200</span>
+                        <span class="m-title">指南宮：百年聖地與千階步道</span>
+                        <div class="m-tags">
+                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">宗教古蹟</span>
+                            <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">日式石燈籠</span>
+                        </div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>指南宮建於清光緒16年（1890年），主祀八仙中的純陽祖師呂洞賓（民間尊稱仙公），是台灣最具代表性的道教聖地之一。廟宇建築依山而建，氣勢宏偉，涵蓋了純陽寶殿、凌霄寶殿、大雄寶殿及地藏王寶殿，是台灣少見儒、道、釋三教同尊的宗教聖地。</p>
+                            <p>過去在坊間曾流傳著「情侶一起去指南宮就會分手」的都市傳說。但事實上這是一場誤會！廟方曾特別澄清，呂洞賓神明慈悲，只會斬斷「爛桃花」與不適合的孽緣，對於真正的好姻緣反而會給予庇佑。為了破除迷思，指南風景區近年更在後山設立了浪漫的「情人聖地」、月老意象與祈福鐘，成為許多情侶打卡的新熱點。</p>
+                            <p>如果不搭纜車或公車，極度推薦從山下走「指南宮千階親山步道」上山。這條步道兩側佇立著數十座從日治時期保留下來的石燈籠，造型古樸，走在被古木參天包圍的石階上，充滿了濃厚的歷史人文氣息與莊嚴寧靜的美感。</p>
+                            <div class="bg-gray-50 p-5 rounded-2xl mt-6 border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-3 flex items-center text-xl"><i class="ph-fill ph-info text-tea-500 mr-2"></i> 達人參觀資訊</h4>
+                                <ul class="space-y-3 text-base">
+                                    <li><strong>📍 地點：</strong> 台北市文山區萬壽路115號</li>
+                                    <li><strong>🚌 交通方式：</strong> 可搭乘貓空纜車至「指南宮站」下車直達；或從政大搭乘公車 530、棕5 直達。</li>
+                                    <li><strong>📸 攝影亮點：</strong> 凌霄寶殿前的廟埕廣場擁有極佳的視野，能無死角俯瞰整個台北盆地。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 4: 達賢圖書館 -->
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 300ms;">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dah_Hsian_Seetoo_Library_inside.jpg?width=800" alt="圖書館建築意象" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Library'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">網美打卡</div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">政大達賢圖書館</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">被網友封為「全台最美大學圖書館」。清水模外觀倒映在滯洪池畔，內部高達七層樓的層退式書牆設計，宛如置身魔法學院。</p>
+                        <button onclick="openModal('modal-data-attr4')" class="mt-auto w-full py-3 bg-gray-50 text-tea-700 rounded-xl font-medium hover:bg-tea-600 hover:text-white transition-colors duration-300 flex justify-center items-center">
+                            深度介紹 <i class="ph ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="modal-data-attr4" class="hidden">
+                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Dah_Hsian_Seetoo_Library_inside.jpg?width=1200</span>
+                        <span class="m-title">政大達賢圖書館</span>
+                        <div class="m-tags">
+                            <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">建築美學</span>
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">全台最美</span>
+                        </div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>位於國立政治大學校區內的「達賢圖書館」，自2019年落成以來，便因其絕美的外觀與極具巧思的內部空間設計，被眾多網友與媒體封為「全台最美大學圖書館」。建築外觀採用沉穩內斂的清水模設計，周圍環繞著綠意盎然的大草皮與景觀滯洪池，天氣好時，圖書館的身影倒映在湖面上，令人驚艷。</p>
+                            <p>走進圖書館內部，最吸睛的莫過於壯觀的「層退式」書架牆與高達七層樓的挑高天井設計。陽光透過大片天窗與玻璃帷幕灑落，光影變化豐富，一圈又一圈環繞向上的書牆，宛如讓人置身於霍格華茲魔法學院的圖書館之中。</p>
+                            <p>這座圖書館不僅外觀迷人，內部更結合了創客空間、VR體驗區、影音製播室等多功能設施，完美展現了現代綠建築美學與大學學術實用性的結合。即使不是政大校友，也非常值得來此感受寧靜的書香氛圍。</p>
+                            <div class="bg-gray-50 p-5 rounded-2xl mt-6 border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-3 flex items-center text-xl"><i class="ph-fill ph-info text-tea-500 mr-2"></i> 達人參觀資訊</h4>
+                                <ul class="space-y-3 text-base">
+                                    <li><strong>📍 地點：</strong> 台北市文山區萬壽路36號</li>
+                                    <li><strong>⚠️ 換證規定：</strong> 非政大校友或學生，需在一樓服務台憑實體身分證件換取臨時參觀證方可入內（每日名額有限制，額滿需排隊等候）。</li>
+                                    <li><strong>💡 拍照須知：</strong> 圖書館內部為閱讀自習空間，需絕對保持安靜。拍照請關閉快門聲，並嚴禁影響學生學習或使用閃光燈。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 私房美食 Section -->
+    <section id="food" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 fade-in-up">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">在地老饕私藏名單</h2>
+                    <div class="h-1 w-24 bg-wood-500 rounded-full mb-6"></div>
+                    <p class="text-gray-600 max-w-xl text-lg">木柵是許多美食家的藏寶圖。從傳承數十年的眷村老味、政大學生排隊名單，到景美溪畔的文青老屋咖啡，絕對能滿足你挑剔的味蕾。</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 美食 1: 小廢墟 -->
+                <div class="flex flex-col sm:flex-row bg-gray-50 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 fade-in-up">
+                    <div class="sm:w-2/5 h-56 sm:h-auto relative overflow-hidden group">
+                        <img src="https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800" alt="小廢墟咖啡廳" onerror="this.onerror=null; this.src='https://placehold.co/600x800/e1efe0/3a6838?text=Coffee'" class="w-full h-full object-cover transform group-hover:scale-105 transition-duration-500">
+                    </div>
+                    <div class="sm:w-3/5 p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-2xl font-bold text-gray-900">Ruins Coffee Roasters</h3>
+                                <span class="flex text-yellow-500 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star-half"></i></span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">由廢棄長達20年的舊車庫改造而成的工業風老屋咖啡廳，曾獲文化部老屋新生大獎。自家烘焙精品咖啡配上限量手工甜點，文青必訪。</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex gap-2">
+                                <span class="bg-wood-100 text-wood-700 text-xs px-2.5 py-1 rounded-md font-medium">老屋新生</span>
+                                <span class="bg-wood-100 text-wood-700 text-xs px-2.5 py-1 rounded-md font-medium">手沖精品</span>
+                            </div>
+                            <button onclick="openModal('modal-data-food1')" class="text-tea-600 hover:text-tea-800 font-bold text-sm flex items-center">老饕食記 <i class="ph ph-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="modal-data-food1" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">Ruins Coffee Roasters 小廢墟咖啡</span>
+                        <div class="m-tags"><span class="bg-wood-100 text-wood-700 px-3 py-1 rounded-full text-sm">人氣咖啡廳</span></div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>隱身在木柵路三段、緊鄰景美溪畔的「小廢墟咖啡 Ruins Coffee Roasters」，它的前身真的是一間荒廢長達20年、堆滿雜物的破舊車庫。主理人洪璽開耗時數月親手打理改造，將其化身為充滿濃厚美式工業風與頹廢美學的咖啡空間，這項創舉更讓它榮獲了2016年「台北老屋新生大獎」的銀獎。</p>
+                            <p>走進店內，你可以看見刻意保留的斑駁磚牆、裸露的木造屋頂結構與各式老件家具，充滿了時間的刻痕。除了絕佳的空間氛圍，這裡更是專業的自家烘焙咖啡館。咖啡豆品質極佳，喜歡品嚐咖啡原味的行家，強烈建議點一杯「單品手沖咖啡」。</p>
+                            <p>不喝咖啡的人也別擔心，店內的奶茶與氣泡飲同樣用心。此外，他們每日限量製作的手工甜點（如冬季限定的草莓戚風蛋糕、濃郁的巴斯克乳酪蛋糕、布朗尼等）都具備極高水準。二樓的閣樓座位區隱密性高，配上窗外的微風，是許多文青私藏的秘密基地。</p>
+                            <p class="text-base bg-gray-50 p-4 rounded-xl"><strong>📍 地址：</strong> 台北市文山區木柵路三段242號</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 美食 2: 江記水盆羊肉 -->
+                <div class="flex flex-col sm:flex-row bg-gray-50 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 fade-in-up" style="transition-delay: 100ms;">
+                    <div class="sm:w-2/5 h-56 sm:h-auto relative overflow-hidden group">
+                        <img src="https://images.pexels.com/photos/3298696/pexels-photo-3298696.jpeg?auto=compress&cs=tinysrgb&w=800" alt="水盆羊肉" onerror="this.onerror=null; this.src='https://placehold.co/600x800/e1efe0/3a6838?text=Food'" class="w-full h-full object-cover transform group-hover:scale-105 transition-duration-500">
+                    </div>
+                    <div class="sm:w-3/5 p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-2xl font-bold text-gray-900">江記水盆羊肉</h3>
+                                <span class="flex text-yellow-500 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">政大學生心中的神級美食！主打陝西風味，清甜不羶的羊肉湯搭配需自己手撕的酥脆「饃餅」，冬天來一碗瞬間暖胃。</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex gap-2">
+                                <span class="bg-red-50 text-red-700 text-xs px-2.5 py-1 rounded-md font-medium">政大排隊名店</span>
+                                <span class="bg-red-50 text-red-700 text-xs px-2.5 py-1 rounded-md font-medium">陝西麵食</span>
+                            </div>
+                            <button onclick="openModal('modal-data-food2')" class="text-tea-600 hover:text-tea-800 font-bold text-sm flex items-center">老饕食記 <i class="ph ph-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="modal-data-food2" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/3298696/pexels-photo-3298696.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">江記水盆羊肉</span>
+                        <div class="m-tags"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">排隊名店</span></div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>說到政大周邊的神級美食，絕對少不了這家位於巷弄內、主打陝西道地麵食的「江記水盆羊肉」。每到用餐時間，店門外總是大排長龍，深受政大學生與在地居民的推崇。</p>
+                            <p>招牌「水盆羊肉」上桌時，是一大碗清澈的高湯與一塊烤得酥脆厚實的「饃餅」。店裡最道地的吃法，是客人必須親手將饃餅撕成約「花生米」大小的碎塊，再放入湯中。羊肉選用優質部位，燉得極為軟嫩且毫無腥羶味；吸收了羊肉鮮甜與淡淡中藥材香氣的碎饃，吃起來口感Q彈有嚼勁，不僅飽足感滿分，冷天吃更是超級暖胃。</p>
+                            <p>除了水盆羊肉，帶有濃郁蒜香、醋酸與辣子風味的「油潑麵（又稱Biang Biang麵）」，那寬大如腰帶的麵條嚼勁十足，也是店內的超人氣必點。由於店內座位不多，建議避開尖峰時段前往。</p>
+                            <p class="text-base bg-gray-50 p-4 rounded-xl"><strong>📍 地址：</strong> 台北市文山區指南路二段45巷12號</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 美食 3: 三老村 -->
+                <div class="flex flex-col sm:flex-row bg-gray-50 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="sm:w-2/5 h-56 sm:h-auto relative overflow-hidden group">
+                        <img src="https://images.pexels.com/photos/5409015/pexels-photo-5409015.jpeg?auto=compress&cs=tinysrgb&w=800" alt="中式麵食" onerror="this.onerror=null; this.src='https://placehold.co/600x800/e1efe0/3a6838?text=Local+Food'" class="w-full h-full object-cover transform group-hover:scale-105 transition-duration-500">
+                    </div>
+                    <div class="sm:w-3/5 p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-2xl font-bold text-gray-900">三老村 醬肉</h3>
+                                <span class="flex text-yellow-500 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star-half"></i></span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">木柵在地經營數十年的老字號眷村味。招牌醬牛肉、富含膠質的豬腳凍與各式滷味，搭配熱騰騰的醡醬麵，是充滿溫度的老味道。</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex gap-2">
+                                <span class="bg-amber-50 text-amber-700 text-xs px-2.5 py-1 rounded-md font-medium">老字號</span>
+                                <span class="bg-amber-50 text-amber-700 text-xs px-2.5 py-1 rounded-md font-medium">眷村滷味</span>
+                            </div>
+                            <button onclick="openModal('modal-data-food3')" class="text-tea-600 hover:text-tea-800 font-bold text-sm flex items-center">老饕食記 <i class="ph ph-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="modal-data-food3" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/5409015/pexels-photo-5409015.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">三老村：五十年的眷村家常味</span>
+                        <div class="m-tags"><span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">經典眷村味</span></div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>位於木柵路上的三老村，外觀樸實無華，甚至有些不起眼，但它卻是木柵地區首屈一指的眷村料理老店。這裡傳承了數十年的好手藝，是許多老木柵人從小吃到大的共同回憶。</p>
+                            <p>一走進店內，目光絕對會被門口那一整櫃的「冷盤滷味」給吸引。店內最著名的招牌是「醬牛肉」，肉質緊實、滷汁帶有特殊香料氣息且不死鹹；另一道必點的「豬腳凍」則富含滿滿的膠質，入口即化，冰涼的口感非常開胃。另外還有入味的素雞、豆干與海帶，點滿一大盤切料是來這用餐的標配。</p>
+                            <p>主食部分，極度推薦他們的「山東大水餃」，皮Q餡多；或者點一碗香氣四溢的「醡醬麵」。吃的時候一定要配上店內特製的辣椒醬與生大蒜，那種純粹而厚實的眷村家常味，吃的是一種情懷，絕對讓你一吃成主顧。</p>
+                            <p class="text-base bg-gray-50 p-4 rounded-xl"><strong>📍 地址：</strong> 台北市文山區木柵路三段5號</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 美食 4: 貓空特色茶餐廳 -->
+                <div class="flex flex-col sm:flex-row bg-gray-50 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 fade-in-up" style="transition-delay: 300ms;">
+                    <div class="sm:w-2/5 h-56 sm:h-auto relative overflow-hidden group">
+                        <img src="https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=800" alt="茶葉料理" onerror="this.onerror=null; this.src='https://placehold.co/600x800/e1efe0/3a6838?text=Tea+Food'" class="w-full h-full object-cover transform group-hover:scale-105 transition-duration-500">
+                    </div>
+                    <div class="sm:w-3/5 p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-2xl font-bold text-gray-900">貓空景觀茶風味餐</h3>
+                                <span class="flex text-yellow-500 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star-half"></i></span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">來到木柵絕不能錯過將在地特產「鐵觀音」入菜的風味料理。茶油麵線、茶香土雞與酥脆的炸茶葉，邊吃邊看夜景是最大享受。</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex gap-2">
+                                <span class="bg-tea-50 text-tea-700 text-xs px-2.5 py-1 rounded-md font-medium">無敵夜景</span>
+                                <span class="bg-tea-50 text-tea-700 text-xs px-2.5 py-1 rounded-md font-medium">茶葉入菜</span>
+                            </div>
+                            <button onclick="openModal('modal-data-food4')" class="text-tea-600 hover:text-tea-800 font-bold text-sm flex items-center">老饕食記 <i class="ph ph-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="modal-data-food4" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">貓空創意茶葉料理 (四哥的店/阿義師)</span>
+                        <div class="m-tags"><span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">地方特色料理</span></div>
+                        <div class="m-content space-y-5 text-gray-700 text-lg leading-relaxed">
+                            <p>來到貓空，除了找間茶坊泡茶聊天，這裡更發展出了木柵獨樹一格的「茶葉料理」。由於木柵盛產鐵觀音與包種茶，許多在地經營數十年的景觀餐廳（例如知名的「四哥的店」或以大廚手藝聞名的「阿義師的大茶壺」），便發揮創意，將茶葉巧妙地融入傳統台菜之中。</p>
+                            <p>經典的必點菜色包括：滑順且帶有淡淡獨特香氣的「茶油麵線」、肉質緊實且帶有茶葉清香的「茶葉放山雞（或茶油雞）」、極具創意且口感猶如海苔般酥脆的「炸茶葉」，以及清爽解膩、湯頭回甘的「鐵觀音雞湯」。飯後如果還有胃口，千萬別錯過在地限定的「鐵觀音霜淇淋」，濃郁的茶香帶點微苦，完美解除了正餐的油膩。</p>
+                            <p>傍晚時分，強烈建議選擇一家擁有戶外座位的景觀餐廳，邊品嚐這些充滿在地特色的茶香佳餚，邊欣賞台北盆地逐漸亮起的璀璨燈火，這絕對是木柵最經典、最不容錯過的旅遊體驗。</p>
+                            <p class="text-base bg-gray-50 p-4 rounded-xl"><strong>📍 建議地點：</strong> 貓空纜車站周邊步道沿線餐廳，假日建議提前訂位。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 健行與運動 Section -->
+    <section id="nature" class="py-24 bg-gray-900 relative overflow-hidden">
+        <!-- 裝飾背景 -->
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs><pattern id="topo" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M54.627 0l.83.83v58.34h-58.34l-.83-.83L54.627 0zM27.313 0l.83.83v29.17h-29.17l-.83-.83L27.313 0z" fill="none" stroke="#ffffff" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#topo)"/>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">親山傍水，戶外天堂</h2>
+                <div class="h-1 w-24 bg-tea-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-300 max-w-2xl mx-auto text-lg">穿上運動鞋，從平緩的河濱自行車道到需要手腳並用的原始山林步道，在木柵大口呼吸芬多精，釋放你的活力。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 步道 1 -->
+                <div class="bg-gray-800/80 backdrop-blur rounded-3xl p-8 border border-gray-700 hover:border-tea-400 transition-all duration-300 group fade-in-up flex flex-col">
+                    <div class="w-14 h-14 bg-gray-700 text-tea-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-tea-500 group-hover:text-white transition-all">
+                        <i class="ph-fill ph-bicycle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">景美溪自行車道</h3>
+                    <div class="flex items-center text-sm text-gray-400 mb-4">
+                        <span class="bg-gray-700 text-gray-200 px-2 py-1 rounded mr-2">平緩易行</span>
+                        <span>約 15 公里</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed flex-grow">沿著景美溪畔延伸至政大。沿途綠草如茵，傍晚騎乘微風徐徐，夕陽映照河面，是慢跑與單車愛好者的天堂。</p>
+                    <button onclick="openModal('modal-data-trail1')" class="mt-6 text-tea-400 hover:text-tea-300 text-sm font-bold flex items-center">了解路線 <i class="ph ph-arrow-right ml-1"></i></button>
+                    <div id="modal-data-trail1" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/2268487/pexels-photo-2268487.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">景美溪左右岸自行車道</span>
+                        <div class="m-tags"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">單車休閒</span></div>
+                        <div class="m-content space-y-4 text-gray-700 text-lg">
+                            <p>景美溪自行車道是一條沿著景美溪畔蜿蜒的綠色廊道，一路從新店、景美連接至木柵動物園與政大，全長約15公里。由於路面平坦寬敞，且與汽機車道完全隔離，非常適合全家大小一同安全騎乘或慢跑。</p>
+                            <p>沿線的河濱公園規劃完善，設有許多體健設施、籃球場、溜冰場以及廣闊的綠地。秋季時，河畔的芒草隨風搖曳，白茫茫的景色如畫；傍晚時分，夕陽餘暉映照在清澈的河面上，更是浪漫至極。</p>
+                            <p><strong>推薦玩法：</strong> 可以從捷運景美站或公館站附近租借 YouBike，沿著河岸一路悠閒往南騎至貓空纜車站或政大周邊，還車後順道在政大商圈品嚐在地美食，是一趟健康又充實的半日遊。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步道 2 -->
+                <div class="bg-gray-800/80 backdrop-blur rounded-3xl p-8 border border-gray-700 hover:border-tea-400 transition-all duration-300 group fade-in-up flex flex-col" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 bg-gray-700 text-tea-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-tea-500 group-hover:text-white transition-all">
+                        <i class="ph-fill ph-flower-tulip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">貓空樟樹步道</h3>
+                    <div class="flex items-center text-sm text-gray-400 mb-4">
+                        <span class="bg-green-900/50 text-green-300 px-2 py-1 rounded mr-2">老少咸宜</span>
+                        <span>約 1.1 公里</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed flex-grow">無障礙平緩步道。春季魯冰花盛開宛如黃色繁星；秋天有波斯菊。沿途重現牛車、穀倉等農村意象，極適合長輩。</p>
+                    <button onclick="openModal('modal-data-trail2')" class="mt-6 text-tea-400 hover:text-tea-300 text-sm font-bold flex items-center">了解路線 <i class="ph ph-arrow-right ml-1"></i></button>
+                    <div id="modal-data-trail2" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/68507/spring-flowers-flowers-collage-floral-68507.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">貓空樟樹步道</span>
+                        <div class="m-tags"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">賞花秘境</span><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">無障礙步道</span></div>
+                        <div class="m-content space-y-4 text-gray-700 text-lg">
+                            <p>貓空樟樹步道前身為貓空地區早期的保甲路線（運送茶葉的牛車道），如今已被臺北市政府精心規劃為一條充滿農村風情的休閒步道。步道全長僅約1.1公里，最大的特色是幾乎沒有高低起伏的階梯，全程鋪設平整的石板，是一條對長輩、輪椅或嬰兒車都非常友善的「無障礙步道」。</p>
+                            <p>這裡四季皆有不同的美景。每年2至3月是著名的「魯冰花季」，金黃色的花海交織著翠綠的茶園，宛如大地的黃色繁星，是攝影愛好者的聖地；到了秋季，則有粉白相間的波斯菊盛開。</p>
+                            <p>漫步在步道途中，你會發現設計者的巧思：重現了早期農村的牛車、轉角炭窯、豬舍與穀倉等意象。中段設有古樸的「彩雲亭」可供休憩，倚靠欄杆欣賞明鏡池的波光粼粼與落羽松，充滿濃濃的鄉土情懷與歲月靜好的氛圍。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步道 3 -->
+                <div class="bg-gray-800/80 backdrop-blur rounded-3xl p-8 border border-gray-700 hover:border-tea-400 transition-all duration-300 group fade-in-up flex flex-col" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 bg-gray-700 text-tea-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-tea-500 group-hover:text-white transition-all">
+                        <i class="ph-fill ph-mountains"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">仙跡岩親山步道</h3>
+                    <div class="flex items-center text-sm text-gray-400 mb-4">
+                        <span class="bg-blue-900/50 text-blue-300 px-2 py-1 rounded mr-2">輕鬆健行</span>
+                        <span>海拔 144 公尺</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed flex-grow">位於景美木柵交界，傳說有呂洞賓留下的足跡。階梯步道多在樹林間，山頂平台可近距離270度俯瞰台北101。</p>
+                    <button onclick="openModal('modal-data-trail3')" class="mt-6 text-tea-400 hover:text-tea-300 text-sm font-bold flex items-center">了解路線 <i class="ph ph-arrow-right ml-1"></i></button>
+                    <div id="modal-data-trail3" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">仙跡岩親山步道</span>
+                        <div class="m-tags"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">入門親山</span><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">觀賞101</span></div>
+                        <div class="m-content space-y-4 text-gray-700 text-lg">
+                            <p>仙跡岩又稱景美山，位於景美與木柵的交界處。雖然最高點海拔僅144公尺，但因為周邊幾乎無高樓阻擋，擁有極佳的視野。這是一條非常親民、適合全家大小在週末午後前往的入門級親山步道。登山口多達十餘處，最便利的入口距離捷運景美站僅需步行幾分鐘。</p>
+                            <p>步道多為鋪設良好的石階與木棧道，兩旁大樹成蔭、生態豐富，即使是炎熱的夏天，走在林間也相當涼爽舒適。關於「仙跡岩」的名稱由來，是因為山頂附近有一塊巨石，上面有著狀似腳印的凹洞，民間傳說這是八仙之一的呂洞賓下凡時所留下的足跡，為這座山增添了神話色彩。</p>
+                            <p>登頂後的觀景平台是整趟路線的高潮。從這裡可以270度俯瞰南台北市區，甚至能清晰、毫無遮蔽地看到台北101大樓。因此，這裡也是許多內行攝影玩家拍攝跨年煙火的熱門秘境，不用去象山人擠人，也能拍出絕美大片。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步道 4 -->
+                <div class="bg-gray-800/80 backdrop-blur rounded-3xl p-8 border border-gray-700 hover:border-tea-400 transition-all duration-300 group fade-in-up flex flex-col" style="transition-delay: 300ms;">
+                    <div class="w-14 h-14 bg-gray-700 text-red-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <i class="ph-fill ph-warning"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">猴山岳登山步道</h3>
+                    <div class="flex items-center text-sm text-gray-400 mb-4">
+                        <span class="bg-red-900/50 text-red-300 px-2 py-1 rounded mr-2">攀岩挑戰</span>
+                        <span>海拔 551 公尺</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed flex-grow">喜歡刺激的登山客絕不能錯過！前段需要手腳並用攀爬近乎垂直的岩壁，登頂後視野開闊，可俯瞰整個大台北。</p>
+                    <button onclick="openModal('modal-data-trail4')" class="mt-6 text-red-400 hover:text-red-300 text-sm font-bold flex items-center">了解路線 <i class="ph ph-arrow-right ml-1"></i></button>
+                    <div id="modal-data-trail4" class="hidden">
+                        <span class="m-img">https://images.pexels.com/photos/1365425/pexels-photo-1365425.jpeg?auto=compress&cs=tinysrgb&w=1200</span>
+                        <span class="m-title">猴山岳登山步道</span>
+                        <div class="m-tags"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">攀岩挑戰</span><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">手腳並用</span></div>
+                        <div class="m-content space-y-4 text-gray-700 text-lg">
+                            <p>如果你覺得一般的木棧道太過無聊，那麼猴山岳絕對能滿足你的冒險精神！猴山岳位於二格山系，海拔551公尺，是一條充滿野趣與高度挑戰性的登山路線，也是許多準備攀登百岳的登山客愛用的訓練場。最經典的路線是從指南宮後山出發。</p>
+                            <p>這條步道最著名、也最刺激的特色，就是會遇到一段近乎垂直（約70-80度傾角）的「猴山岳前峰攀岩段」。在這裡，你必須將登山杖收起，全程手腳並用，拉著廟方與熱心山友架設的粗大繩索，踏著裸露的樹根與岩縫，宛如猴子般奮力攀爬而上（強烈建議自備防滑手套以免磨破手）。</p>
+                            <p>雖然攀爬過程十分考驗體力與膽識，但當你滿頭大汗登頂前峰的那一刻，迎面而來的開闊視野絕對值回票價。天氣晴朗時，可以清楚看見整個台北盆地、遠處的觀音山，甚至大屯山系。下山時若不想原路陡降，可選擇銜接茶展中心步道，一路漫步返回貓空，找間茶坊喝茶慰勞自己的辛勞。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 全局互動式彈出視窗 (Modal) -->
+    <div id="global-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
+        <!-- 半透明遮罩 -->
+        <div class="absolute inset-0 bg-gray-900/70 modal-overlay" onclick="closeModal()"></div>
+        
+        <!-- 視窗主體 (加寬至 max-w-4xl 應付較多文字) -->
+        <div class="modal-panel bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative z-10 scale-95 opacity-0 overflow-hidden">
+            <!-- 關閉按鈕 -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center backdrop-blur transition-colors">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            
+            <!-- 頂部大圖 (增加高度) -->
+            <div class="h-64 sm:h-96 w-full relative flex-shrink-0">
+                <img id="modal-display-img" src="" alt="詳細圖片" onerror="this.onerror=null; this.src='https://placehold.co/1200x800/e1efe0/3a6838?text=Loading...'" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <div id="modal-display-tags" class="flex flex-wrap gap-2 mb-3">
+                        <!-- 標籤動態插入 -->
+                    </div>
+                    <h2 id="modal-display-title" class="text-3xl sm:text-4xl font-bold text-white shadow-sm">標題</h2>
+                </div>
+            </div>
+            
+            <!-- 內容滾動區 -->
+            <div class="p-6 sm:p-10 overflow-y-auto no-scrollbar flex-grow">
+                <div id="modal-display-content" class="prose max-w-none text-gray-800">
+                    <!-- 內容動態插入 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="bg-gray-950 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-800 pb-8">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <i class="ph-fill ph-leaf text-tea-500 text-3xl mr-3"></i>
+                    <span class="font-bold text-2xl tracking-wider">木柵之美</span>
+                </div>
+                <div class="flex space-x-6 text-gray-400">
+                    <a href="#" class="hover:text-tea-400 transition-colors bg-gray-900 p-3 rounded-full"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-tea-400 transition-colors bg-gray-900 p-3 rounded-full"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-tea-400 transition-colors bg-gray-900 p-3 rounded-full"><i class="ph-fill ph-map-pin text-xl"></i></a>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2026 探索木柵之美. 專為台北市文山區旅遊推廣設計.</p>
+                <p class="mt-4 md:mt-0">Built for GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 互動邏輯腳本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 手機版導覽選單切換
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // 點擊手機版連結後自動收起選單
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // 2. 導覽列滾動效果 (改變背景透明度)
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                    navbar.classList.replace('bg-white/80', 'bg-white/95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.replace('bg-white/95', 'bg-white/80');
+                }
+            });
+
+            // 3. 滾動視差與元素淡入動畫 (Intersection Observer)
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            const appearOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            fadeElements.forEach(el => appearOnScroll.observe(el));
+            
+            // 4. 監聽 Esc 鍵關閉 Modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+
+        // ==========================================
+        // Modal 彈出視窗控制邏輯
+        // ==========================================
+        function openModal(dataId) {
+            const dataNode = document.getElementById(dataId);
+            if(!dataNode) return;
+
+            // 取得 Modal 內的元素
+            const modal = document.getElementById('global-modal');
+            const modalImg = document.getElementById('modal-display-img');
+            const modalTitle = document.getElementById('modal-display-title');
+            const modalTags = document.getElementById('modal-display-tags');
+            const modalContent = document.getElementById('modal-display-content');
+            const modalPanel = modal.querySelector('.modal-panel');
+
+            // 讀取隱藏資料並填入 Modal
+            modalImg.src = dataNode.querySelector('.m-img').innerText;
+            modalTitle.innerText = dataNode.querySelector('.m-title').innerText;
+            modalTags.innerHTML = dataNode.querySelector('.m-tags').innerHTML;
+            modalContent.innerHTML = dataNode.querySelector('.m-content').innerHTML;
+
+            // 顯示 Modal (移除 hidden)
+            modal.classList.remove('hidden');
+            
+            // 鎖定背景滾動
+            document.body.classList.add('modal-open');
+
+            // 觸發放大與淡入動畫 (使用 setTimeout 確保 display:block 生效後才加 class)
+            setTimeout(() => {
+                modalPanel.classList.remove('scale-95', 'opacity-0');
+                modalPanel.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('global-modal');
+            const modalPanel = modal.querySelector('.modal-panel');
+
+            // 觸發縮小與淡出動畫
+            modalPanel.classList.remove('scale-100', 'opacity-100');
+            modalPanel.classList.add('scale-95', 'opacity-0');
+
+            // 等待動畫結束後隱藏 Modal 並恢復背景滾動
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                
+                // 清空內容避免殘影
+                document.getElementById('modal-display-img').src = '';
+            }, 300); // 300ms 對應 CSS 的 transition duration
+        }
+    </script>
+</body>
+</html>
