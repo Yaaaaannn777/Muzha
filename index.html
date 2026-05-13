@@ -90,9 +90,10 @@
                 </div>
                 <!-- 電腦版選單 -->
                 <div class="hidden md:flex space-x-8">
+                    <a href="#heritage" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">文化起源</a>
                     <a href="#attractions" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">必訪景點</a>
                     <a href="#food" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">私房美食</a>
-                    <a href="#nature" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">健行與運動</a>
+                    <a href="#seasonal" class="text-gray-600 hover:text-tea-600 font-medium transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-tea-500 after:transition-all hover:after:w-full">季節指南</a>
                 </div>
                 <!-- 手機版選單按鈕 -->
                 <div class="md:hidden flex items-center">
@@ -105,9 +106,10 @@
         <!-- 手機版下拉選單 -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full">
         <div class="px-4 py-3 space-y-2">
+            <a href="#heritage" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-scroll mr-2"></i>文化起源</a>
             <a href="#attractions" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-map-pin mr-2"></i>必訪景點</a>
             <a href="#food" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-fork-knife mr-2"></i>私房美食</a>
-            <a href="#nature" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-mountains mr-2"></i>健行與運動</a>
+            <a href="#seasonal" class="mobile-link block px-3 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-tea-700 hover:bg-tea-50 transition-colors"><i class="ph ph-calendar-check mr-2"></i>季節指南</a>
         </div>
     </div>
 </nav>
@@ -116,7 +118,7 @@
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <!-- 背景圖片 (加入 onerror 備援) -->
         <div class="absolute inset-0">
-            <img src="images/hero.png" alt="木柵茶園風景" class="w-full h-full object-cover scale-105 transform origin-center animate-[pulse_20s_ease-in-out_infinite_alternate]" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Maokong_Tea_Plantations.jpg" alt="木柵茶園風景" class="w-full h-full object-cover scale-105 transform origin-center animate-[pulse_20s_ease-in-out_infinite_alternate]" />
             <div class="absolute inset-0 bg-gray-900/60 mix-blend-multiply"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-transparent to-gray-50/95"></div>
         </div>
@@ -164,7 +166,7 @@
                 </div>
                 <div class="lg:w-1/2 relative fade-in-up" style="transition-delay: 200ms;">
                     <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
-                        <img src="images/tea.png" alt="傳統茶文化" class="w-full aspect-[4/5] object-cover">
+                        <img src="https://images.pexels.com/photos/36462130/pexels-photo-36462130.jpeg" alt="傳統茶文化" class="w-full aspect-[4/5] object-cover">
                     </div>
                     <div class="absolute inset-0 border-2 border-tea-200 rounded-3xl -translate-x-6 translate-y-6 -z-10"></div>
                 </div>
@@ -185,7 +187,7 @@
                 <!-- 景點 1: 貓空纜車 -->
                 <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="images/gondola.png" alt="貓空纜車" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Maokong_Tea_Plantations.jpg" alt="貓空纜車" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">浪漫約會</div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -196,7 +198,7 @@
                         </button>
                     </div>
                     <div id="modal-data-attr1" class="hidden">
-                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Maokong_Gondola_20210817.jpg?width=1200</span>
+                        <span class="m-img">https://upload.wikimedia.org/wikipedia/commons/5/5b/Maokong_Tea_Plantations.jpg</span>
                         <span class="m-title">貓空纜車與在地茶文化</span>
                         <div class="m-tags">
                             <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">熱門地標</span>
@@ -221,7 +223,7 @@
                 <!-- 景點 2: 動物園 -->
                 <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 100ms;">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="images/zoo.png" alt="木柵動物園" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Pangolin_Dome%2C_Taipei_Zoo%2C_Dec_2024_%283%29.jpg" alt="木柵動物園" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">親子首選</div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -232,7 +234,7 @@
                         </button>
                     </div>
                     <div id="modal-data-attr2" class="hidden">
-                        <span class="m-img">images/zoo.png</span>
+                        <span class="m-img">https://upload.wikimedia.org/wikipedia/commons/c/c9/Pangolin_Dome%2C_Taipei_Zoo%2C_Dec_2024_%283%29.jpg</span>
                         <span class="m-title">臺北市立動物園</span>
                         <div class="m-tags">
                             <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">親子必遊</span>
@@ -257,7 +259,7 @@
                 <!-- 景點 3: 指南宮 -->
                 <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 200ms;">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Zhinan_Temple_20231108_(cropped).jpg?width=800" alt="指南宮" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Zhinan+Temple'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <img src="images/temple.png" alt="指南宮" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">歷史人文</div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -268,7 +270,7 @@
                         </button>
                     </div>
                     <div id="modal-data-attr3" class="hidden">
-                        <span class="m-img">images/temple.png</span>
+                        <span class="m-img">https://upload.wikimedia.org/wikipedia/commons/4/4c/%E6%8C%87%E5%8D%97%E5%AE%AE%E5%87%8C%E9%9C%84%E5%AF%B6%E6%AE%BF.jpg</span>
                         <span class="m-title">指南宮：百年聖地與千階步道</span>
                         <div class="m-tags">
                             <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">宗教古蹟</span>
@@ -473,6 +475,93 @@
                             <p>經典的必點菜色包括：滑順且帶有淡淡獨特香氣的「茶油麵線」、肉質緊實且帶有茶葉清香的「茶葉放山雞（或茶油雞）」、極具創意且口感猶如海苔般酥脆的「炸茶葉」，以及清爽解膩、湯頭回甘的「鐵觀音雞湯」。飯後如果還有胃口，千萬別錯過在地限定的「鐵觀音霜淇淋」，濃郁的茶香帶點微苦，完美解除了正餐的油膩。</p>
                             <p>傍晚時分，強烈建議選擇一家擁有戶外座位的景觀餐廳，邊品嚐這些充滿在地特色的茶香佳餚，邊欣賞台北盆地逐漸亮起的璀璨燈火，這絕對是木柵最經典、最不容錯過的旅遊體驗。</p>
                             <p class="text-base bg-gray-50 p-4 rounded-xl"><strong>📍 建議地點：</strong> 貓空纜車站周邊步道沿線餐廳，假日建議提前訂位。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 季節旅行指南 Section -->
+    <section id="seasonal" class="py-24 bg-tea-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">四季木柵：何時出發？</h2>
+                <div class="h-1 w-24 bg-tea-500 mx-auto rounded-full"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto text-lg">木柵的魅力隨季節更迭。無論是春天的花海、夏天的清涼溪水，還是冬天的暖心熱茶，每一季都有驚喜。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 春季 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-tea-100 fade-in-up">
+                    <div class="text-tea-500 text-4xl mb-6"><i class="ph-fill ph-flower"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">春季：繁花盛開</h3>
+                    <p class="text-gray-600 leading-relaxed">2月至3月是木柵最浪漫的時刻。樟樹步道的魯冰花海鋪滿大地，杏花林則開滿粉嫩花朵，是攝影愛好者的天堂。</p>
+                </div>
+                <!-- 夏季 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-tea-100 fade-in-up" style="transition-delay: 100ms;">
+                    <div class="text-blue-500 text-4xl mb-6"><i class="ph-fill ph-waves"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">夏季：避暑品茗</h3>
+                    <p class="text-gray-600 leading-relaxed">炎炎夏日，躲進貓空的山間茶屋，吹著自然微風。或者沿著景美溪畔騎行，感受河面的涼意與綠意。</p>
+                </div>
+                <!-- 秋季 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-tea-100 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="text-orange-500 text-4xl mb-6"><i class="ph-fill ph-mountains"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">秋季：健行祈福</h3>
+                    <p class="text-gray-600 leading-relaxed">秋高氣爽最適合挑戰猴山岳或漫步仙跡岩。在能見度極高的日子裡，從山頂遠眺，台北101近在咫尺。</p>
+                </div>
+                <!-- 冬季 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-tea-100 fade-in-up" style="transition-delay: 300ms;">
+                    <div class="text-red-500 text-4xl mb-6"><i class="ph-fill ph-coffee"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">冬季：暖心食補</h3>
+                    <p class="text-gray-600 leading-relaxed">低溫時分，來一碗熱騰騰的江記水盆羊肉，配上剛出爐的饃餅。再上山泡一壺濃郁的鐵觀音，身心皆暖。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 交通資訊 Section -->
+    <section id="traffic" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <div class="lg:w-1/2 fade-in-up">
+                    <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-8">輕鬆抵達木柵</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 bg-tea-100 text-tea-600 rounded-full flex items-center justify-center text-2xl">
+                                <i class="ph ph-train"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">捷運 (MRT)</h4>
+                                <p class="text-gray-600">搭乘文湖線至「動物園站」可抵達動物園與纜車起點；至「萬芳醫院站」或「木柵站」可轉乘多線公車。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl">
+                                <i class="ph ph-bus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">在地公車 (Bus)</h4>
+                                <p class="text-gray-600">棕15、小10 可直達貓空各茶屋；236、660 則是往返公館與市中心的主幹道。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 bg-wood-100 text-wood-600 rounded-full flex items-center justify-center text-2xl">
+                                <i class="ph ph-tram"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">貓空纜車 (Gondola)</h4>
+                                <p class="text-gray-600">全票 $120，持悠遊卡更方便。建議平日搭乘避開人潮，水晶車廂需現場排隊或預約。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full fade-in-up" style="transition-delay: 200ms;">
+                    <div class="bg-gray-100 rounded-3xl h-96 w-full flex items-center justify-center border-2 border-dashed border-gray-300">
+                        <div class="text-center p-8">
+                            <i class="ph ph-map-trifold text-6xl text-gray-400 mb-4"></i>
+                            <p class="text-gray-500 font-medium text-lg">互動式地圖載入中...</p>
+                            <p class="text-gray-400 text-sm mt-2">(此處可嵌入 Google Maps 顯示景點位置)</p>
                         </div>
                     </div>
                 </div>
