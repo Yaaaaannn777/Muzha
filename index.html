@@ -116,24 +116,59 @@
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <!-- 背景圖片 (加入 onerror 備援) -->
         <div class="absolute inset-0">
-            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_101_2009_amk.jpg?width=1920" alt="木柵茶園風景" onerror="this.onerror=null; this.src='https://placehold.co/1920x1080/294328/ffffff?text=Explore+Muzha'" class="w-full h-full object-cover scale-105 transform origin-center animate-[pulse_20s_ease-in-out_infinite_alternate]" />
+            <img src="images/hero.png" alt="木柵茶園風景" class="w-full h-full object-cover scale-105 transform origin-center animate-[pulse_20s_ease-in-out_infinite_alternate]" />
             <div class="absolute inset-0 bg-gray-900/60 mix-blend-multiply"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-transparent to-gray-50/95"></div>
         </div>
         
         <!-- 內容 -->
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 fade-in-up">
-            <span class="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur border border-white/30 text-white font-medium tracking-[0.2em] mb-6 text-sm shadow-sm">TAIPEI WENSHAN DISTRICT</span>
+            <span class="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur border border-white/30 text-white font-medium tracking-[0.2em] mb-6 text-sm shadow-sm uppercase">Exploring Wenshan District</span>
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-xl leading-tight">
-                遠離城市喧囂<br/><span class="text-tea-300">細細品味木柵之美</span>
+                在茶香與山林間<br/><span class="text-tea-300">發現木柵的深度靈魂</span>
             </h1>
             <p class="text-lg md:text-xl text-gray-100 mb-10 leading-relaxed max-w-3xl mx-auto drop-shadow-md font-light">
-                穿梭於茶香繚繞的貓空山林、漫步在景美溪畔的微風中。這裡不僅有全台最大的動物園，更隱藏著政大學生口耳相傳的巷弄美味與職人咖啡。跟著我們的腳步，探索屬於台北南區獨有的慢活節奏。
+                不只是動物園與纜車。穿梭於清代遺留的木柵小徑、細品百年傳承的鐵觀音。這裡的每一寸土地都訴說著先人的故事，邀請您與我們一同深入這片台北南區的世外桃源。
             </p>
             <a href="#attractions" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-tea-900 bg-tea-300 rounded-full shadow-lg hover:bg-white hover:shadow-tea-300/50 hover:-translate-y-1 transition-all duration-300 group">
                 展開深度旅程
                 <i class="ph ph-arrow-down ml-2 group-hover:animate-bounce"></i>
             </a>
+        </div>
+    </section>
+
+    <!-- 歷史與文化 Section -->
+    <section id="heritage" class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2 fade-in-up">
+                    <div class="relative">
+                        <div class="absolute -top-10 -left-10 w-32 h-32 bg-tea-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-wood-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                        <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6 relative">
+                            從木製柵欄到<br/><span class="text-tea-600">百年茶鄉的蛻變</span>
+                        </h2>
+                        <div class="h-1.5 w-20 bg-wood-500 mb-8 rounded-full"></div>
+                        <div class="space-y-6 text-gray-600 text-lg leading-relaxed">
+                            <p>
+                                「木柵」之名起源於清代，當時先民為防禦周邊部隊的侵擾，在景美溪畔與山麓間築起了一道道堅實的木製柵欄，這便是這片土地守護家園的初步印記。
+                            </p>
+                            <p>
+                                到了十九世紀末，茶葉開啟了木柵的黃金年代。張氏兩兄弟從福建安溪引進了「鐵觀音」茶苗，並發現貓空紅土質與氣候極其適合其生長。經過百年的傳承與揉捻，木柵鐵觀音以其厚實的喉韻與特殊的熟果香，成為了台灣茶文化的代表。
+                            </p>
+                            <p>
+                                今日的木柵，雖然柵欄已逝，但那份守護傳統與自然的韌性依然深植於此。從老屋新生到環境保育，我們在現代城市的邊緣，保留了最純粹的靈魂。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 relative fade-in-up" style="transition-delay: 200ms;">
+                    <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="images/tea.png" alt="傳統茶文化" class="w-full aspect-[4/5] object-cover">
+                    </div>
+                    <div class="absolute inset-0 border-2 border-tea-200 rounded-3xl -translate-x-6 translate-y-6 -z-10"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -150,7 +185,7 @@
                 <!-- 景點 1: 貓空纜車 -->
                 <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maokong_Gondola_20210817.jpg?width=800" alt="貓空纜車" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Maokong+Gondola'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <img src="images/gondola.png" alt="貓空纜車" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">浪漫約會</div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -186,7 +221,7 @@
                 <!-- 景點 2: 動物園 -->
                 <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 fade-in-up" style="transition-delay: 100ms;">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_Zoo_Entrance_20220822.jpg?width=800" alt="木柵動物園" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e1efe0/3a6838?text=Taipei+Zoo'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <img src="images/zoo.png" alt="木柵動物園" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-tea-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">親子首選</div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -197,7 +232,7 @@
                         </button>
                     </div>
                     <div id="modal-data-attr2" class="hidden">
-                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Taipei_Zoo_Entrance_20220822.jpg?width=1200</span>
+                        <span class="m-img">images/zoo.png</span>
                         <span class="m-title">臺北市立動物園</span>
                         <div class="m-tags">
                             <span class="bg-tea-100 text-tea-700 px-3 py-1 rounded-full text-sm">親子必遊</span>
@@ -233,7 +268,7 @@
                         </button>
                     </div>
                     <div id="modal-data-attr3" class="hidden">
-                        <span class="m-img">https://commons.wikimedia.org/wiki/Special:FilePath/Zhinan_Temple_20231108_(cropped).jpg?width=1200</span>
+                        <span class="m-img">images/temple.png</span>
                         <span class="m-title">指南宮：百年聖地與千階步道</span>
                         <div class="m-tags">
                             <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">宗教古蹟</span>
@@ -593,6 +628,89 @@
             </div>
         </div>
     </div>
+
+    <!-- 季節旅行指南 Section -->
+    <section class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">季節旅行指南</h2>
+                <div class="h-1 w-24 bg-tea-500 mx-auto rounded-full"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto text-lg">木柵的四季擁有截然不同的面貌，無論何時到訪都能發現驚喜。</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 fade-in-up">
+                    <div class="text-tea-500 text-4xl mb-4"><i class="ph ph-flower-lotus"></i></div>
+                    <h3 class="text-xl font-bold mb-3">春季：花海盛宴</h3>
+                    <p class="text-gray-600">2-3月樟樹步道魯冰花盛開，隨後杏花林與櫻花相繼綻放，是攝影愛好者的天堂。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 fade-in-up" style="transition-delay: 100ms;">
+                    <div class="text-tea-500 text-4xl mb-4"><i class="ph ph-sun"></i></div>
+                    <h3 class="text-xl font-bold mb-3">夏季：溪畔避暑</h3>
+                    <p class="text-gray-600">景美溪畔微風徐徐，或搭乘纜車上山，在海拔300公尺的茶屋享受比市中心低3度的清涼。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="text-tea-500 text-4xl mb-4"><i class="ph ph-wind"></i></div>
+                    <h3 class="text-xl font-bold mb-3">秋季：健行祈福</h3>
+                    <p class="text-gray-600">氣候涼爽最適宜攀爬指南宮千階步道或猴山岳，登高望遠，能見度是一年之中最高的季節。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 fade-in-up" style="transition-delay: 300ms;">
+                    <div class="text-tea-500 text-4xl mb-4"><i class="ph ph-coffee"></i></div>
+                    <h3 class="text-xl font-bold mb-3">冬季：暖心食旅</h3>
+                    <p class="text-gray-600">在冷風中來一碗溫潤的水盆羊肉，或在貓空茶屋圍爐煮茶，體驗最溫馨的台北冬日。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 交通資訊 Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gray-900 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row fade-in-up">
+                <div class="lg:w-1/2 p-12 lg:p-20">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-8">如何抵達木柵？</h2>
+                    <div class="space-y-8">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-tea-500/20 text-tea-400 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ph ph-train text-2xl"></i>
+                            </div>
+                            <div class="ml-6">
+                                <h4 class="text-white font-bold text-xl mb-2">搭乘捷運</h4>
+                                <p class="text-gray-400">搭乘文湖線至「動物園站」可抵達動物園與纜車站；至「萬芳醫院站」或「木柵站」可轉乘多線公車。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-tea-500/20 text-tea-400 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ph ph-bus text-2xl"></i>
+                            </div>
+                            <div class="ml-6">
+                                <h4 class="text-white font-bold text-xl mb-2">搭乘公車</h4>
+                                <p class="text-gray-400">搭乘 236、660、933 或 綠1 等路線至「政大」或「木柵市場」站，穿梭各景點極為便利。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-tea-500/20 text-tea-400 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ph ph-car text-2xl"></i>
+                            </div>
+                            <div class="ml-6">
+                                <h4 class="text-white font-bold text-xl mb-2">自行駕車</h4>
+                                <p class="text-gray-400">經國道三號（木柵交流道）下，沿著木柵路即可進入核心區域。周邊設有多處公有停車場。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 bg-gray-800 relative min-h-[300px]">
+                    <!-- 這裡可以放置地圖圖片或 Embed 地圖 -->
+                    <img src="images/hero.png" alt="木柵地圖導覽" class="w-full h-full object-cover opacity-50 grayscale">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center">
+                            <i class="ph ph-map-trifold text-white text-6xl mb-4 opacity-50"></i>
+                            <p class="text-white font-medium">點擊開啟 Google Maps 導覽</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- 頁尾 -->
     <footer class="bg-gray-950 text-white py-12">
