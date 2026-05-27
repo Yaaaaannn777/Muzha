@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dcard 理財板 - 貼文視覺化</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --card-bg: #1e293b;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+        }
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        #wordcloud-chart {
+            width: 100%;
+            height: 500px;
+        }
+        .post-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .post-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.2s;
+        }
+        .post-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .post-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; color: #60a5fa; }
+        .post-author { font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; }
+        .post-snippet { font-size: 0.9rem; line-height: 1.4; color: #cbd5e1; }
+        .nav-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #fff;
+            text-decoration: none;
+            background: var(--primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-btn">← 回到首頁</a>
+        <h1>Dcard 理財板 - 前30大熱門話題視覺化</h1>
+        
+        <div class="card">
+            <h2>熱門話題文字雲</h2>
+            <div id="wordcloud-chart"></div>
+        </div>
+
+        <div class="card">
+            <h2>熱門貼文列表</h2>
+            <div class="post-list" id="post-list-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const postsData = [{"title": "為何許多人把退休想得很困難？", "author": "國立清華大學[1d](https://www.dcard.tw/f/money/p/261553591)", "snippet": "台灣薪資中位數約 39，133 元，代表有一半上班族月薪不到 4 萬。也意味著，多數人實際上是用低於 4 萬的收入在生活；而其中也不可能人人都是月光族，因此可推估不少人的實際生活支出，可能只落在約 3"}, {"title": "25歲小資族理財分享", "author": "[湘](https://www.dcard.tw/@carlaexposito)[1d](https://www.dcard.tw/f/money/p/261551360)", "snippet": "嗨大家好我是湘 想要分享我的小小喜悅，目前總資產有約莫三百萬了～其中約200萬在股票上，100萬借給家人 10萬緊急預備金。我覺得自己跟有錢人不一樣的地方是家裡沒有給我礦，都是靠自己賺的存的。我大概從"}, {"title": "0050買在101.6會很有勇氣嗎？", "author": "國立東華大學[1d](https://www.dcard.tw/f/money/p/261553250)", "snippet": "如題，我想放長期5-10年，覺得0050應該還會繼續高下去，所以今天就買了，買了反而有一種踏實感，只是時間的問題。會考慮進行二次質押，畢竟本金太小了，之後還會想要增貸不斷投入"}, {"title": "好多人看空", "author": "國立東華大學[11h](https://www.dcard.tw/f/money/p/261556420)", "snippet": "我就是一直陸續在買，現在歷史新高也真的很忐忑，有人收手，已經滿手現金了嗎？單純討論下大家的看法"}, {"title": "從月光到有存款…", "author": "開南大學[1d](https://www.dcard.tw/f/money/p/261550374)", "snippet": "以前一直覺得自己不是亂花錢的人，不會去買什麼很貴的東西，就是日常所需跟吃的，但每次月底看帳戶都是差不多見底😂，後來才發現像我常買手搖、咖啡，外送也很常點，看到小額支出都會覺得才幾十塊沒差，很多小錢累積"}, {"title": "請益 郵局儲蓄險解約", "author": "德明財經科技大學 財政稅務系[7h](https://www.dcard.tw/f/money/p/261557517)", "snippet": "之前去郵局被推銷買了常春增額還本保險10年，當初選擇月繳$2613/月，每2年可以領生存金$6000，目前繳完6年，6月可以領第3次生存金，繳完10年後每年可以領$6000生存金，但要78歲才可以領出"}, {"title": "慢慢獲利出清", "author": "[titangreg](https://www.dcard.tw/@titangreg)[8h](https://www.dcard.tw/f/money/p/261557352)", "snippet": "這個星期看股市獲利率已經接近100%，因為我是以存股為主，想月月有錢領，所以和同事相比，獲利差很多，不過還是被同事說服，開始出清，預計把獲利超過50%的股票出售一半，結果把今天最賺錢的先掛10張，結果"}, {"title": "完美錯過這波行情怎麼辦？", "author": "國立臺灣大學[10h](https://www.dcard.tw/f/money/p/261556683)", "snippet": "小弟不才，去年就覺得台股漲太多，就全部賣光，只留一張0050。這波超級大行情，居然集保帳戶裡只有10萬，同事都是上百萬甚至上千萬的在賺。真正體會到什麼叫欲哭無淚，該追回來嗎？還是現在已經是末升段尾端了"}, {"title": "10年期信貸聽起來很甜，但苦的在後面", "author": "[喵麻](https://www.dcard.tw/@mirror_0202)[5h](https://www.dcard.tw/f/money/p/261558499)", "snippet": "最近看到很多銀行開始推出10年期信貸，其實喵麻看到的第一眼都有點倒抽一口氣，先來說說　以10年信貸來講他的好處跟壞處，好處是如果你以大筆資金來說，假使以130萬年利率4%來說，我如果是以一般來說 貸款"}, {"title": "信貸討論", "author": "國立屏東科技大學[1d](https://www.dcard.tw/f/money/p/261550295)", "snippet": "目前工作為科技業工程師，年收入200萬，銀行信貸給的條件：額度：300萬，利率：2.65%，開辦費：7000，綁約：1年，請問這條件目前算ok嗎？謝謝"}, {"title": "口袋直接暫停上市交易？還有這招喔", "author": "逢甲大學[1d](https://www.dcard.tw/f/money/p/261550466)", "snippet": "還有直接暫停上市交易這招？太誇張了吧？"}, {"title": "群創", "author": "Merchant[1d](https://www.dcard.tw/f/money/p/261551653)", "snippet": "大家持有群創的心態是如何，看到今日開高走低，是不是在護盤呢？"}, {"title": "半導體噴爛，會選哪隻買?(00892、00911、00927、00891)", "author": "國立臺北護理健康大學[11h](https://www.dcard.tw/f/money/p/261556306)", "snippet": "富邦台灣半導體(00892.TW)"}, {"title": "如果大家都跟投資專家炒股辭職不工作，台灣會變的怎麼樣？", "author": "中臺科技大學 護理系[8h](https://www.dcard.tw/f/money/p/261557312)", "snippet": "醫療人員的工作需要輪班調時差還要加班，所以沒時間盯盤買賣槓桿，因此定期定額長期投資，每個月固定丟三萬，美股台股都有買，每年也要出國犒賞自己看看世界🌍，同時也在學習自己的興趣（下廚）、每個禮拜運動健身、"}, {"title": "信貸詢問（已更新中信利率）", "author": "世新大學[10h](https://www.dcard.tw/f/money/p/261556646)", "snippet": "大家好，我目前的工作年資約7年，月薪資6萬多，去年的扣繳憑單85萬左右，中信有三個信貸共約65萬，中信卡債約15萬，台新卡債約15萬，總欠款大約95萬左右，利率都逼近15%⋯，我的薪資六萬多每個月繳完"}, {"title": "信貸小白", "author": "[fish](https://www.dcard.tw/@nevergivingup)[13h](https://www.dcard.tw/f/money/p/261555911)", "snippet": "大家好！，我上週申請信貸，將來給我3.88%，100萬，分七年，開辦費3088元，綁約一年。下面是我的條件，看版上許多人都拿到3%以下，不知道有沒有人跟我一樣🥲，收入：120萬年薪，公司：外商採購，年"}, {"title": "買房or再緩緩", "author": "IC Design Engineer[1d](https://www.dcard.tw/f/money/p/261552423)", "snippet": "各位理財版的大大們好，最近遇到買房問題想問大家怎麼看🥹，先說一下我個人的背景：27歲、目前年收約190w，股票的帳面價值大約750w左右、現金50w，目前有一筆信貸200w，月還款25000左右（還剩"}, {"title": "券商系統不能下單超痛苦==", "author": "萬能科技大學[1d](https://www.dcard.tw/f/money/p/261551205)", "snippet": "上次真的被券商雷到，股市就在震盪了 APP還卡住登不進去，當下看損益跳來跳去 超怕錯過賣點一路往下…，後來發現手續費就算低，但真的遇到狀況 系統不穩營業員又找不到人也很可怕….，目前交易是都轉到另一家"}, {"title": "退休說得容易，真退難", "author": "[TT0808](https://www.dcard.tw/@ky2954)[7h](https://www.dcard.tw/f/money/p/261557816)", "snippet": "15年前跟自己說只要被動月收10W就退休，現主時跟自己說只要被動月收30W就退休，到底15年前的自己與現在差在哪，1.每年支出從120W到255W，以前扣除貸款，一家2口一年生活消費是80W左右（全部"}, {"title": "信貸求推薦", "author": "元培醫事科技大學[1d](https://www.dcard.tw/f/money/p/261551572)", "snippet": "年齡：22，工作年資：快五年，月收入：4-5萬（年薪50左右），存款：30萬，富邦和國泰信用卡額度都在14萬左右，想要貸款20萬-60萬之間 希望是3%內，請問有希望嗎？有推薦的銀行嗎？"}, {"title": "第一次信貸後想轉貸的問題", "author": "[小衛](https://www.dcard.tw/@wesleylin19)[1d](https://www.dcard.tw/f/money/p/261550997)", "snippet": "大家好，小弟因為家裡裝潢緣故，有幫忙在國泰用信貸貸了60萬下來，利率是5.63%，年繳11490，60期，已繳了12期剛過綁約期剩餘493000多，每期都定期繳款無拖欠，卡費也是，（偶爾會用單筆消費分"}, {"title": "她抱0050半年賺67％！100.5元高割離席原因曝：跟國安基金有關", "author": "[月下看春秋](https://www.dcard.tw/@mike295)[1d](https://www.dcard.tw/f/money/p/261553681)", "snippet": "感冒糖漿某種程度上，還是有指標性意義！"}, {"title": "00631L 00685L 買完", "author": "國立東華大學[1d](https://www.dcard.tw/f/money/p/261550534)", "snippet": "適合買完不看盤嗎？"}, {"title": "🇹🇼5.27比特幣行情分析", "author": "[Trader Feng](https://www.dcard.tw/@traderfeng)[9h](https://www.dcard.tw/f/money/p/261557076)", "snippet": "阻力有效 不要摸底"}, {"title": "請益 公務人員信貸 一銀", "author": "國立政治大學[9h](https://www.dcard.tw/f/money/p/261556993)", "snippet": "去年5月申請一銀信貸，用113年所得扣繳憑單，年收入81萬申請，2.195% 借145萬，投入股市 績效很好，目前一銀信貸債務剩127萬，若是今年想再跟一銀增貸，一樣2.195，114年所得扣繳憑單，"}, {"title": "信貸", "author": "[桃督導](https://www.dcard.tw/@lucky870409)[1d](https://www.dcard.tw/f/money/p/261553630)", "snippet": "請問最近的銀行有沒有在推什麼活動？或者是優惠？"}, {"title": "00403a為何外資瘋買 答案藏在換股", "author": "[Work hard. Smart work](https://www.dcard.tw/@gainalot)[1d](https://www.dcard.tw/f/money/p/261551208)", "snippet": "\\\\"}, {"title": "juji 同時申請會過嗎 + 心情抒發", "author": "輔仁大學[16h](https://www.dcard.tw/f/money/p/261555717)", "snippet": "搭版打擾了，被詐騙但不想告訴家人，又是小白故不考慮銀行，請問申請過A公司再申請juji會過嗎🥹，真的不行我就要去和家人坦誠相見被罵了 rap，這種事太荒謬了我真的不曉得怎麼跟家人開口啊啊啊，或是有沒有"}, {"title": "【調高大台 小台 微台 電子 小電子 選擇權保證金】5/27（三）13:45 盤後生效", "author": "[期權笠笠（統一期貨）](https://www.dcard.tw/@kaoli1010)[1d](https://www.dcard.tw/f/money/p/261552620)", "snippet": "【調高大台 小台 微台 電子 小電子 選擇權保證金】5/27（三）13：45 盤後生效，大台 526000→578000，小台 131500→144500，微台 26300→28900，電子 7340"}, {"title": "台股再創新高，遙望五萬點", "author": "[笑看人間](https://www.dcard.tw/@folium2023)[2h](https://www.dcard.tw/f/money/p/261559302)", "snippet": "這一波大多頭真的完全令人想不到，回想我去年底，就把美股都出清獲利了結，賺了一百多萬以為自己很厲害，現在回頭覺得自己跟傻子一樣，還好台股還在，目前帳上獲利也超過四百五十萬，但是居高思危，這一波到底可以漲"}];
+        
+        // Render Post List
+        const listContainer = document.getElementById('post-list-container');
+        postsData.forEach(post => {
+            const div = document.createElement('div');
+            div.className = 'post-item';
+            div.innerHTML = `
+                <div class="post-title">${post.title}</div>
+                <div class="post-author">${post.author}</div>
+                <div class="post-snippet">${post.snippet}</div>
+            `;
+            listContainer.appendChild(div);
+        });
+
+        // Generate WordCloud Data (Simple word frequency simulation from titles)
+        const text = postsData.map(p => p.title).join(' ');
+        const words = text.split(/[\s、，。！？（）()]+/);
+        const wordCount = {};
+        words.forEach(w => {
+            if(w.length > 1) wordCount[w] = (wordCount[w] || 0) + 1;
+        });
+        
+        const chartData = Object.keys(wordCount).map(w => ({
+            name: w,
+            value: wordCount[w] * 10 + Math.random() * 50 // Boosted for visual effect
+        })).sort((a,b) => b.value - a.value).slice(0, 50);
+
+        // Render ECharts WordCloud
+        const chartDom = document.getElementById('wordcloud-chart');
+        const myChart = echarts.init(chartDom);
+        
+        const option = {
+            tooltip: { show: true },
+            series: [{
+                type: 'wordCloud',
+                shape: 'circle',
+                keepAspect: false,
+                left: 'center',
+                top: 'center',
+                width: '90%',
+                height: '90%',
+                right: null,
+                bottom: null,
+                sizeRange: [14, 60],
+                rotationRange: [-90, 90],
+                rotationStep: 45,
+                gridSize: 8,
+                drawOutOfBound: false,
+                layoutAnimation: true,
+                textStyle: {
+                    fontFamily: 'sans-serif',
+                    fontWeight: 'bold',
+                    color: function () {
+                        return 'rgb(' + [
+                            Math.round(Math.random() * 160 + 90),
+                            Math.round(Math.random() * 160 + 90),
+                            Math.round(Math.random() * 255)
+                        ].join(',') + ')';
+                    }
+                },
+                emphasis: { focus: 'self', textStyle: { textShadowBlur: 10, textShadowColor: '#333' } },
+                data: chartData
+            }]
+        };
+        
+        myChart.setOption(option);
+        window.addEventListener('resize', () => myChart.resize());
+    </script>
+</body>
+</html>
